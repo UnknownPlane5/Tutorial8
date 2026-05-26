@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Tutorial8.DTOs;
+using Tutorial8.Exceptions;
 using Tutorial8.Services;
 
 namespace Tutorial8.Controllers;
@@ -30,7 +31,7 @@ public class PatientsController : ControllerBase
             var id = await _dbService.AddBedAssignmentAsync(pesel, dto);
             return Created($"api/patients/{pesel}/bedassignments/{id}", new { id });
         }
-        catch (KeyNotFoundException ex)
+        catch (NotFoundException ex)
         {
             return NotFound(new { message = ex.Message });
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tutorial8.Data;
 using Tutorial8.DTOs;
+using Tutorial8.Exceptions;
 using Tutorial8.Models;
 
 namespace Tutorial8.Services;
@@ -88,12 +89,8 @@ public class DbService : IDbService
 
     public async Task<int> AddBedAssignmentAsync(string pesel, BedAssignmentPostDto dto)
     {
-        // 1. Verify patient exists
-        var patient = await _context.Patients.FindAsync(pesel)
-            ?? throw new KeyNotFoundException($"Patient with PESEL '{pesel}' not found.");
+        var patient = await _context.Patients.FindAsync(pesel) ?? throw new NotFoundException($"Patient with PESEL '{pesel}' not found.");
 
-        // 2. Find a bed of the requested type in the requested ward
-        //    that is not occupied during the requested period
         var to = dto.To ?? DateTime.MaxValue;
 
         var bed = await _context.Beds
@@ -106,9 +103,7 @@ public class DbService : IDbService
                 !b.BedAssignments.Any(ba =>
                     ba.From < to &&
                     (ba.To == null || ba.To > dto.From)))
-            .FirstOrDefaultAsync()
-            ?? throw new KeyNotFoundException(
-                $"No available bed of type '{dto.BedType}' in ward '{dto.Ward}' for the requested period.");
+            .FirstOrDefaultAsync() ?? throw new NotFoundException($"No available bed of type '{dto.BedType}' in ward '{dto.Ward}' for the requested period.");
 
         var assignment = new BedAssignment
         {

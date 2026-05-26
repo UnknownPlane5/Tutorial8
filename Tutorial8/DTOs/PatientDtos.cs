@@ -1,6 +1,5 @@
 namespace Tutorial8.DTOs;
 
-// ── GET /api/patients ─────────────────────────────────────────
 
 public class PatientGetDto
 {
@@ -57,7 +56,6 @@ public class WardDto
     public string Description { get; set; } = null!;
 }
 
-// ── POST /api/patients/{pesel}/bedassignments ─────────────────
 
 public class BedAssignmentPostDto
 {
