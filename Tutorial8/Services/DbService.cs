@@ -104,7 +104,6 @@ public class DbService : IDbService
                     ba.From < to &&
                     (ba.To == null || ba.To > dto.From)))
             .FirstOrDefaultAsync() ?? throw new NotFoundException($"No available bed of type '{dto.BedType}' in ward '{dto.Ward}' for the requested period.");
-
         var assignment = new BedAssignment
         {
             PatientPesel = pesel,
