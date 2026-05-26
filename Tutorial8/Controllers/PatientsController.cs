@@ -31,9 +31,9 @@ public class PatientsController : ControllerBase
             var id = await _dbService.AddBedAssignmentAsync(pesel, dto);
             return Created($"api/patients/{pesel}/bedassignments/{id}", new { id });
         }
-        catch (NotFoundException ex)
+        catch (NotFoundException e)
         {
-            return NotFound(new { message = ex.Message });
+            return NotFound(e.Message );
         }
     }
 }
